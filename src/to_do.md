@@ -1,10 +1,9 @@
 ##TODO
 
 #P0
-- style
-- add documentation
 
 #P2
+- style
  - undo button
  - responsive (test on obile)
  - keyboard shortcuts
