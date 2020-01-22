@@ -79,6 +79,10 @@ code {
     color: red;
   }
 
+  .error{
+    color: red;
+  }
+
   .show_leaderboard {
     border-radius: 1vh;
     border: .2vh solid;
@@ -86,4 +90,15 @@ code {
     border-color: white;
     margin-top: 7vh;
     font-size: 2.5vh
+  }
+
+  .explanation {
+    font-size: 12px;
+    width: 205px;
+    margin: auto;
+    text-align: justify;
+  }
+
+  .ta_options {
+    width: 205px;
   }

@@ -18,9 +18,11 @@ export default class App extends React.Component {
       pair: [],
       leaderboardShown: false,
       options_textarea: '',
-      options_vacation: ['Paris','Rome','Venice','London','Barcelona','Florence','Vienna','Madrid','Prague','Istanbul','Milan','Amsterdam','Budapest','Munich','Athens','Berlin','Lisbon','Santorini','Seville','Moscow','Nice','Naples','Dubrovnik','Ediburgh','Saint Petersburg','Pisa','Granada','Frankfurt','Copenhagen','Stockholm','Salzburg','Zurich','Porto','Helsinki','Lucerne','Reykjavik','Mykonos','Mont Saint-Michel','Amalfi','Oslo','Dublin','Capri','Cologne','Split','Krakow','Lake Como','Crete','Malaga','Bratislava','Brussels','Riga','Heidelberg','Bruges','Valencia','Porto','Biarritz','Innsbruck','Gothenburg','San Sebastián','Sienna','Antwerp','Mostar','Veliko Tarnovo','Tallinn','Bordeaux','Lille','Tbilisi','Hamburg','Sardinia','Genoa','San Marino','Lucca','Bologna','Padua','Malta','Bucharest','Belgrade','Ljubljana','Majorca','Chernobyl','Lviv','Rotterdam','Corsica','Tarifa','Puglia','Geneva','Interlaken','Sicily','Paros'],
-      options_baby: ['Harry','Max','Marcus','Arnold','Isaac','Nethaniel','Julien','Arnaud','Colin']
+      options_vacation: ['Paris','Rome','Venice','London','Barcelona','Florence','Vienna','Madrid','Prague','Istanbul','Milan','Amsterdam','Budapest','Munich','Athens','Berlin','Lisbon','Santorini','Seville','Moscow','Nice','Naples','Dubrovnik','Ediburgh','Saint Petersburg','Pisa','Granada','Frankfurt','Copenhagen','Stockholm','Salzburg','Zurich','Helsinki','Lucerne','Reykjavik','Mykonos','Mont Saint-Michel','Amalfi','Oslo','Dublin','Capri','Cologne','Split','Krakow','Lake Como','Crete','Malaga','Bratislava','Brussels','Riga','Heidelberg','Bruges','Valencia','Porto','Biarritz','Innsbruck','Gothenburg','San Sebastián','Sienna','Antwerp','Mostar','Veliko Tarnovo','Tallinn','Bordeaux','Lille','Tbilisi','Hamburg','Sardinia','Genoa','San Marino','Lucca','Bologna','Padua','Malta','Bucharest','Belgrade','Ljubljana','Majorca','Chernobyl','Lviv','Rotterdam','Corsica','Tarifa','Puglia','Geneva','Interlaken','Sicily','Paros'],
+      options_baby: ['Liam','Noah','William','James','Oliver','Benjamin','Elijah','Lucas','Mason','Logan','Alexander','Ethan','Jacob','Michael','Daniel','Henry','Jackson','Sebastian','Aiden','Matthew','Samuel','David','Joseph','Carter','Owen','Wyatt','John','Jack','Luke','Jayden','Dylan','Grayson','Levi','Issac','Gabriel','Julian','Mateo','Anthony','Jaxon','Lincoln','Joshua','Christopher','Andrew','Theodore','Caleb','Ryan','Asher','Nathan','Thomas','Leo','Harry','Max','Marcus','Arnold','Isaac','Nethaniel','Julien','Arnaud','Colin'],
+      options_netflix: ['Messiah','Spinning Out','The Witcher','Happy!','Living With Yourself','The Crown','Queer Eye: We\'re in Japan!','Derry Girls','Black Mirror','Atypical','Line of Duty','Star Trek: The Next Generation','Weeds','Sense8','Unbelievable','The Dark Crystal: Age of Resistance','The Spy','The People v. O.J. Simpson','Mindhunter','The Thick of It','Dark','Orange is the New Black','Neon Genesis Evangelion','Carter','Stranger Things','When They See Us','What/If','Special','Tuca and Bertie','The Assassination of Gianni Versace','One-Punch Man','Dogs','Russian Doll','The OA','Sex Education','The Last Kingdom','Dead Set','Orphan Black','BoJack Horseman','The Good Place','The Alienist','Manhunt: Unabomber','Travellers','Better Call Saul','The End of the F***ing World','Aggretsuko','American Vandal','GLOW'],
 
+      ta_options_error: 'Must add at least four options'
     };  
       
 /*     this.handleChange = this.handleChange.bind(this);
@@ -30,8 +32,14 @@ export default class App extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
+
+    var options_1d = event.target.ta_options.value.split("\n");
     
-    const options_1d = event.target.ta_options.value.split("\n");
+    var index = options_1d.indexOf('');
+    if (index > -1) {
+      options_1d.splice(index, 1);
+    }
+    
     const options_tmp = {}; 
     for (var i = 0; i < options_1d.length; i++) {     
       options_tmp[options_1d[i]] = new Rating();
@@ -44,7 +52,10 @@ export default class App extends React.Component {
   }
 
   handleChange = event => {
-    this.setState({options_textarea : event.target.value})
+
+    const ta_options_error_tmp = this.validateOptions(event.target.value);
+
+    this.setState({options_textarea : event.target.value,ta_options_error: ta_options_error_tmp})
   }
 
   handleChoice = event => {
@@ -78,14 +89,20 @@ export default class App extends React.Component {
 
   handlePrefill = event => {
 
-    var prefill = ''
+    var prefill = '';
     if (event.target.value == "baby") {
       prefill = this.state.options_baby.join("\r\n")
     } else if (event.target.value == "vacation") {
       prefill = this.state.options_vacation.join("\r\n")
-    }
+    } else if (event.target.value == "netflix") {
+      prefill = this.state.options_netflix.join("\r\n")
+    }  
 
-    this.setState({ options_textarea: prefill },() => {
+    
+
+    const ta_options_error_tmp = this.validateOptions(prefill);
+
+    this.setState({ options_textarea: prefill, ta_options_error: ta_options_error_tmp},() => {
       //console.log(this.state.options)         
     })
 
@@ -143,6 +160,32 @@ export default class App extends React.Component {
     return option_tmp_return;
   }
 
+  validateOptions(eventValue) {
+
+    const options_1d = eventValue.split("\n");
+    
+    const duplicate_options = this.findDuplicates(options_1d);
+    console.log(duplicate_options);
+    var ta_options_error_tmp  = 'Must add at least four options';
+    if (duplicate_options.length >  0) {
+      ta_options_error_tmp = "The following options are duplicated: ".concat(duplicate_options.join(',')) 
+    } else if (options_1d.length > 3) {
+      ta_options_error_tmp = '';
+    }
+
+    return ta_options_error_tmp
+  }
+
+  findDuplicates = (arr) => {
+    let sorted_arr = arr.slice().sort(); // You can define the comparing function here. 
+    let results = [];
+    for (let i = 0; i < sorted_arr.length - 1; i++) {
+      if (sorted_arr[i + 1] == sorted_arr[i]) {
+        results.push(sorted_arr[i]);
+      }
+    }
+    return results;
+  }
 
   render() {
 
@@ -159,7 +202,7 @@ export default class App extends React.Component {
     } else {
       return (
         <div className="App">
-          <OptionForm options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit}/>
+          <OptionForm ta_options_error={this.state.ta_options_error} options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit}/>
         </div>
       )
     }

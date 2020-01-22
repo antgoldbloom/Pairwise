@@ -1,19 +1,8 @@
 ##TODO
 
 #P0
- - default leaderboard not shown
- - submit deleted edge case
- - validate 
-    - for duplicate options
-    - at least three options
-    - automatically delete empty rows
 - style
 - add documentation
-
-#P1
- - fix github
- - deploy
- - add deployment actions
 
 #P2
  - undo button
