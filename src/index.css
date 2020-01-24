@@ -102,3 +102,7 @@ code {
   .ta_options {
     width: 205px;
   }
+
+  .button {
+    minWidth: 150
+  }

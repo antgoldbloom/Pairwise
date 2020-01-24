@@ -7,7 +7,6 @@ import OptionForm from "./components/option_form";
 import Pair from "./components/pair";
 import HideLeaderboard from "./components/buttons";
 import Navbar from "./components/navbar";
-import Typography from 'material-ui/styles/typography';
 
 
 export default class App extends React.Component {
@@ -17,13 +16,15 @@ export default class App extends React.Component {
       options: [],
       options_submitted: false,
       pair: [],
-      leaderboardShown: false,
+      leaderboardShown: true,
       options_textarea: '',
-      options_vacation: ['Paris','Rome','Venice','London','Barcelona','Florence','Vienna','Madrid','Prague','Istanbul','Milan','Amsterdam','Budapest','Munich','Athens','Berlin','Lisbon','Santorini','Seville','Moscow','Nice','Naples','Dubrovnik','Ediburgh','Saint Petersburg','Pisa','Granada','Frankfurt','Copenhagen','Stockholm','Salzburg','Zurich','Helsinki','Lucerne','Reykjavik','Mykonos','Mont Saint-Michel','Amalfi','Oslo','Dublin','Capri','Cologne','Split','Krakow','Lake Como','Crete','Malaga','Bratislava','Brussels','Riga','Heidelberg','Bruges','Valencia','Porto','Biarritz','Innsbruck','Gothenburg','San Sebastián','Sienna','Antwerp','Mostar','Veliko Tarnovo','Tallinn','Bordeaux','Lille','Tbilisi','Hamburg','Sardinia','Genoa','San Marino','Lucca','Bologna','Padua','Malta','Bucharest','Belgrade','Ljubljana','Majorca','Chernobyl','Lviv','Rotterdam','Corsica','Tarifa','Puglia','Geneva','Interlaken','Sicily','Paros'],
       options_baby: ['Liam','Noah','William','James','Oliver','Benjamin','Elijah','Lucas','Mason','Logan','Alexander','Ethan','Jacob','Michael','Daniel','Henry','Jackson','Sebastian','Aiden','Matthew','Samuel','David','Joseph','Carter','Owen','Wyatt','John','Jack','Luke','Jayden','Dylan','Grayson','Levi','Issac','Gabriel','Julian','Mateo','Anthony','Jaxon','Lincoln','Joshua','Christopher','Andrew','Theodore','Caleb','Ryan','Asher','Nathan','Thomas','Leo','Harry','Max','Marcus','Arnold','Isaac','Nethaniel','Julien','Arnaud','Colin'],
+
+      options_vacation: ['Paris','Rome','Venice','London','Barcelona','Florence','Vienna','Madrid','Prague','Istanbul','Milan','Amsterdam','Budapest','Munich','Athens','Berlin','Lisbon','Santorini','Seville','Moscow','Nice','Naples','Dubrovnik','Ediburgh','Saint Petersburg','Pisa','Granada','Frankfurt','Copenhagen','Stockholm','Salzburg','Zurich','Helsinki','Lucerne','Reykjavik','Mykonos','Mont Saint-Michel','Amalfi','Oslo','Dublin','Capri','Cologne','Split','Krakow','Lake Como','Crete','Malaga','Bratislava','Brussels','Riga','Heidelberg','Bruges','Valencia','Porto','Biarritz','Innsbruck','Gothenburg','San Sebastián','Sienna','Antwerp','Mostar','Veliko Tarnovo','Tallinn','Bordeaux','Lille','Tbilisi','Hamburg','Sardinia','Genoa','San Marino','Lucca','Bologna','Padua','Malta','Bucharest','Belgrade','Ljubljana','Majorca','Chernobyl','Lviv','Rotterdam','Corsica','Tarifa','Puglia','Geneva','Interlaken','Sicily','Paros'],
       options_netflix: ['Messiah','Spinning Out','The Witcher','Happy!','Living With Yourself','The Crown','Queer Eye: We\'re in Japan!','Derry Girls','Black Mirror','Atypical','Line of Duty','Star Trek: The Next Generation','Weeds','Sense8','Unbelievable','The Dark Crystal: Age of Resistance','The Spy','The People v. O.J. Simpson','Mindhunter','The Thick of It','Dark','Orange is the New Black','Neon Genesis Evangelion','Carter','Stranger Things','When They See Us','What/If','Special','Tuca and Bertie','The Assassination of Gianni Versace','One-Punch Man','Dogs','Russian Doll','The OA','Sex Education','The Last Kingdom','Dead Set','Orphan Black','BoJack Horseman','The Good Place','The Alienist','Manhunt: Unabomber','Travellers','Better Call Saul','The End of the F***ing World','Aggretsuko','American Vandal','GLOW'],
 
-      ta_options_error: 'Must add at least four options'
+      ta_options_error: '',
+      option_count:  0, 
     };  
       
 /*     this.handleChange = this.handleChange.bind(this);
@@ -88,31 +89,32 @@ export default class App extends React.Component {
     this.setState({pair: pair_tmp, options: options_tmp  },() => {});
   }
 
-  handlePrefill = event => {
+
+  handleSelect = event => {
+       console.log(event.target.value);
 
     var prefill = '';
-    if (event.target.value == "baby") {
+    if (event.target.value === "babyboy") {
       prefill = this.state.options_baby.join("\r\n")
-    } else if (event.target.value == "vacation") {
+    } else if (event.target.value === "vacation") {
       prefill = this.state.options_vacation.join("\r\n")
-    } else if (event.target.value == "netflix") {
+    } else if (event.target.value === "netflix") {
       prefill = this.state.options_netflix.join("\r\n")
     }  
 
-    
 
     const ta_options_error_tmp = this.validateOptions(prefill);
 
     this.setState({ options_textarea: prefill, ta_options_error: ta_options_error_tmp},() => {
       //console.log(this.state.options)         
     })
-
+  
   }
 
   handleButton = event => {
 
-    console.log(event.target.value);
-    if (event.target.value === 'reset'){
+    console.log(event.currentTarget.value);
+    if (event.currentTarget.value === 'reset'){
       
       this.setState({ options: '',options_textarea: '', options_submitted: false, leaderboardShown: false },() => {
       });
@@ -167,13 +169,16 @@ export default class App extends React.Component {
     
     const duplicate_options = this.findDuplicates(options_1d);
     console.log(duplicate_options);
-    var ta_options_error_tmp  = 'Must add at least four options';
+    var ta_options_error_tmp  = '';
     if (duplicate_options.length >  0) {
       ta_options_error_tmp = "The following options are duplicated: ".concat(duplicate_options.join(',')) 
-    } else if (options_1d.length > 3) {
-      ta_options_error_tmp = '';
+    } else if (options_1d.length < 4) {
+      ta_options_error_tmp = 'Must add '.concat(5-options_1d.length, ' more options.')  ;
     }
 
+    this.setState({option_count : options_1d.length})
+
+    
     return ta_options_error_tmp
   }
 
@@ -188,6 +193,7 @@ export default class App extends React.Component {
     return results;
   }
 
+
   render() {
 
     if (this.state.options_submitted === true) {
@@ -198,7 +204,7 @@ export default class App extends React.Component {
 
               <Pair pair={this.state.pair} onClick={this.handleChoice}/>
               <HideLeaderboard leaderboardShown={this.state.leaderboardShown} onClick={this.handleButton}/>
-            {this.state.leaderboardShown ? <Leaderboard options={this.state.options} onClick={this.handleDelete} /> : <div></div>}
+              {this.state.leaderboardShown ? <Leaderboard options={this.state.options} onClick={this.handleDelete} /> : <div></div>}
 
 
         </div>
@@ -208,7 +214,7 @@ export default class App extends React.Component {
         <div className="App">
           <Navbar />
 
-          <OptionForm ta_options_error={this.state.ta_options_error} options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit}/>
+          <OptionForm option_count={this.state.option_count} ta_options_error={this.state.ta_options_error} options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit} onSelect={this.handleSelect}/>
         </div>
       )
     }
