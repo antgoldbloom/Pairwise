@@ -4,21 +4,21 @@
 
 #P2
  - style
-    - symantic UI
-    - watch design vidos
-    - keep buttons still on mobile
-    - nicer text box
-    - have explanation unfold
- - undo button
- - keyboard shortcuts
+    - pair page
+       - keep buttons still 
  - add google analytics
+ - prepoulate with more lists
+ - recommending how many more pairs
 
-#P3
- - guidance on when to stop
- - ability to download a snapshot
- - ability to upload a snapshot
 
 #POST TO HACKERNEWS
+
+#P3
+ - ability to download a snapshot
+ - ability to upload a snapshot
+ - keyboard shortcuts
+ - undo button
+
 
 #LATER
  - logins and persisting storage

@@ -18,10 +18,13 @@ export default class App extends React.Component {
       pair: [],
       leaderboardShown: true,
       options_textarea: '',
-      options_baby: ['Liam','Noah','William','James','Oliver','Benjamin','Elijah','Lucas','Mason','Logan','Alexander','Ethan','Jacob','Michael','Daniel','Henry','Jackson','Sebastian','Aiden','Matthew','Samuel','David','Joseph','Carter','Owen','Wyatt','John','Jack','Luke','Jayden','Dylan','Grayson','Levi','Issac','Gabriel','Julian','Mateo','Anthony','Jaxon','Lincoln','Joshua','Christopher','Andrew','Theodore','Caleb','Ryan','Asher','Nathan','Thomas','Leo','Harry','Max','Marcus','Arnold','Isaac','Nethaniel','Julien','Arnaud','Colin'],
+      options_boy: ['Liam','Noah','William','James','Oliver','Benjamin','Elijah','Lucas','Mason','Logan','Alexander','Ethan','Jacob','Michael','Daniel','Henry','Jackson','Sebastian','Aiden','Matthew','Samuel','David','Joseph','Carter','Owen','Wyatt','John','Jack','Luke','Jayden','Dylan','Grayson','Levi','Issac','Gabriel','Julian','Mateo','Anthony','Jaxon','Lincoln','Joshua','Christopher','Andrew','Theodore','Caleb','Ryan','Asher','Nathan','Thomas','Leo'],
+      
 
       options_vacation: ['Paris','Rome','Venice','London','Barcelona','Florence','Vienna','Madrid','Prague','Istanbul','Milan','Amsterdam','Budapest','Munich','Athens','Berlin','Lisbon','Santorini','Seville','Moscow','Nice','Naples','Dubrovnik','Ediburgh','Saint Petersburg','Pisa','Granada','Frankfurt','Copenhagen','Stockholm','Salzburg','Zurich','Helsinki','Lucerne','Reykjavik','Mykonos','Mont Saint-Michel','Amalfi','Oslo','Dublin','Capri','Cologne','Split','Krakow','Lake Como','Crete','Malaga','Bratislava','Brussels','Riga','Heidelberg','Bruges','Valencia','Porto','Biarritz','Innsbruck','Gothenburg','San Sebastián','Sienna','Antwerp','Mostar','Veliko Tarnovo','Tallinn','Bordeaux','Lille','Tbilisi','Hamburg','Sardinia','Genoa','San Marino','Lucca','Bologna','Padua','Malta','Bucharest','Belgrade','Ljubljana','Majorca','Chernobyl','Lviv','Rotterdam','Corsica','Tarifa','Puglia','Geneva','Interlaken','Sicily','Paros'],
       options_netflix: ['Messiah','Spinning Out','The Witcher','Happy!','Living With Yourself','The Crown','Queer Eye: We\'re in Japan!','Derry Girls','Black Mirror','Atypical','Line of Duty','Star Trek: The Next Generation','Weeds','Sense8','Unbelievable','The Dark Crystal: Age of Resistance','The Spy','The People v. O.J. Simpson','Mindhunter','The Thick of It','Dark','Orange is the New Black','Neon Genesis Evangelion','Carter','Stranger Things','When They See Us','What/If','Special','Tuca and Bertie','The Assassination of Gianni Versace','One-Punch Man','Dogs','Russian Doll','The OA','Sex Education','The Last Kingdom','Dead Set','Orphan Black','BoJack Horseman','The Good Place','The Alienist','Manhunt: Unabomber','Travellers','Better Call Saul','The End of the F***ing World','Aggretsuko','American Vandal','GLOW'],
+
+      option_prefill: 'none',
 
       ta_options_error: '',
       option_count:  0, 
@@ -95,17 +98,18 @@ export default class App extends React.Component {
 
     var prefill = '';
     if (event.target.value === "babyboy") {
-      prefill = this.state.options_baby.join("\r\n")
+      prefill = this.state.options_boy.join("\r\n")
     } else if (event.target.value === "vacation") {
       prefill = this.state.options_vacation.join("\r\n")
     } else if (event.target.value === "netflix") {
       prefill = this.state.options_netflix.join("\r\n")
     }  
 
+    const option_prefill_tmp = event.target.value;
 
     const ta_options_error_tmp = this.validateOptions(prefill);
 
-    this.setState({ options_textarea: prefill, ta_options_error: ta_options_error_tmp},() => {
+    this.setState({option_prefill: option_prefill_tmp, options_textarea: prefill, ta_options_error: ta_options_error_tmp},() => {
       //console.log(this.state.options)         
     })
   
@@ -114,14 +118,16 @@ export default class App extends React.Component {
   handleButton = event => {
 
     console.log(event.currentTarget.value);
-    if (event.currentTarget.value === 'reset'){
-      
-      this.setState({ options: '',options_textarea: '', options_submitted: false, leaderboardShown: false },() => {
-      });
-    } else {
+    if (event.currentTarget.value === 'leaderboardToggle') {
       let leaderboardShown_tmp = this.state.leaderboardShown === true ? false : true;
       this.setState({ leaderboardShown: leaderboardShown_tmp },() => {});
-    }
+      
+     
+    } else {
+      this.setState({ options: '',options_textarea: '', options_submitted: false, leaderboardShown: false },() => {
+      });
+
+      }
 
   }
 
@@ -200,7 +206,7 @@ export default class App extends React.Component {
       return (
 
         <div className="App">
-              <Navbar />
+              <Navbar onClick={this.handleButton} />
 
               <Pair pair={this.state.pair} onClick={this.handleChoice}/>
               <HideLeaderboard leaderboardShown={this.state.leaderboardShown} onClick={this.handleButton}/>
@@ -214,7 +220,7 @@ export default class App extends React.Component {
         <div className="App">
           <Navbar />
 
-          <OptionForm option_count={this.state.option_count} ta_options_error={this.state.ta_options_error} options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit} onSelect={this.handleSelect}/>
+          <OptionForm option_value={this.state.option_prefill} option_count={this.state.option_count} ta_options_error={this.state.ta_options_error} options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit} onSelect={this.handleSelect}/>
         </div>
       )
     }

@@ -12,7 +12,7 @@ export default class Navbar extends React.Component {
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="title" color="inherit">
-                            Pairwise Comparisons
+                            <a href="" onClick={this.props.onClick} className="heading">Pairwise Comparisons</a>
                         </Typography>
                     </Toolbar>
                 </AppBar>

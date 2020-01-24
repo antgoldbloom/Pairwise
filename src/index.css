@@ -103,6 +103,8 @@ code {
     width: 205px;
   }
 
-  .button {
-    minWidth: 150
+  .heading {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
   }

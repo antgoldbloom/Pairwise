@@ -21,10 +21,9 @@ export default class Buttons extends React.Component {
         <div className="row">
           <div className="left">&nbsp;</div>
           <div className="middle">
-            <Button style={style} onClick={this.props.onClick} value="leaderboardToggle">
+            <Button color="primary" style={style} onClick={this.props.onClick} value="leaderboardToggle">
               {this.props.leaderboardShown ? "Hide" : "Show"} Rankings
             </Button>
-            <Button style={style} onClick={this.props.onClick} value="reset">Reset</Button>
           </div>
           <div className="right">&nbsp;</div>
         </div>
@@ -34,3 +33,5 @@ export default class Buttons extends React.Component {
       )
     }
   }
+
+  /*            <Button style={style} onClick={this.props.onClick} value="reset">Reset</Button>*/
