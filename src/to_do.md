@@ -1,14 +1,13 @@
 ##TODO
 
 #P0
-
-#P2
  
+ - Get GA working
  - prepoulate with more lists
  - recommending how many more pairs
  - warn against too many items
  - pair page: keep buttons still 
-
+ - change favicon
 
 #POST TO HACKERNEWS
 

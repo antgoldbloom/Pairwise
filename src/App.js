@@ -42,6 +42,14 @@ export default class App extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
+
+    ReactGA.event({
+      category: 'Option Form',
+      action: 'Submit Option Form',
+      transport: event.target.ta_options.value
+    });
+
+
     var options_1d = event.target.ta_options.value.split("\n");
     
     var index = options_1d.indexOf('');
