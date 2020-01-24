@@ -6,7 +6,8 @@ import Leaderboard from "./components/leaderboard";
 import OptionForm from "./components/option_form";
 import Pair from "./components/pair";
 import HideLeaderboard from "./components/buttons";
-
+import Navbar from "./components/navbar";
+import Typography from 'material-ui/styles/typography';
 
 
 export default class App extends React.Component {
@@ -191,9 +192,12 @@ export default class App extends React.Component {
 
     if (this.state.options_submitted === true) {
       return (
+
         <div className="App">
-            <Pair pair={this.state.pair} onClick={this.handleChoice}/>
-            <HideLeaderboard leaderboardShown={this.state.leaderboardShown} onClick={this.handleButton}/>
+              <Navbar />
+
+              <Pair pair={this.state.pair} onClick={this.handleChoice}/>
+              <HideLeaderboard leaderboardShown={this.state.leaderboardShown} onClick={this.handleButton}/>
             {this.state.leaderboardShown ? <Leaderboard options={this.state.options} onClick={this.handleDelete} /> : <div></div>}
 
 
@@ -202,6 +206,8 @@ export default class App extends React.Component {
     } else {
       return (
         <div className="App">
+          <Navbar />
+
           <OptionForm ta_options_error={this.state.ta_options_error} options_textarea={this.state.options_textarea} onClick={this.handlePrefill} onChangeValue={this.handleChange} onSubmit={this.handleSubmit}/>
         </div>
       )
