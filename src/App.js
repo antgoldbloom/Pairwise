@@ -8,6 +8,9 @@ import Pair from "./components/pair";
 import HideLeaderboard from "./components/buttons";
 import Navbar from "./components/navbar";
 
+import ReactGA from 'react-ga';
+
+
 
 export default class App extends React.Component {
   constructor() {
@@ -30,6 +33,9 @@ export default class App extends React.Component {
       option_count:  0, 
     };  
       
+    const trackingId = "UA-156912037-1"; // Replace with your Google Analytics tracking ID
+    ReactGA.initialize(trackingId);
+
 /*     this.handleChange = this.handleChange.bind(this);
  */    this.handleSubmit = this.handleSubmit.bind(this);
 

@@ -3,13 +3,12 @@
 #P0
 
 #P2
- - style
-    - pair page
-       - keep buttons still 
+ 
  - add google analytics
  - prepoulate with more lists
  - recommending how many more pairs
  - warn against too many items
+ - pair page: keep buttons still 
 
 
 #POST TO HACKERNEWS
