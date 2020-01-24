@@ -4,7 +4,6 @@
 
 #P2
  
- - add google analytics
  - prepoulate with more lists
  - recommending how many more pairs
  - warn against too many items

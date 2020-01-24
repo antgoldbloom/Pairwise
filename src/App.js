@@ -36,9 +36,7 @@ export default class App extends React.Component {
     const trackingId = "UA-156912037-1"; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);
 
-/*     this.handleChange = this.handleChange.bind(this);
- */    this.handleSubmit = this.handleSubmit.bind(this);
-
+    
   }
 
   handleSubmit = event => {
