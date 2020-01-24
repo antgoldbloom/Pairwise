@@ -46,7 +46,7 @@ export default class App extends React.Component {
     ReactGA.event({
       category: 'Option Form',
       action: 'Submit Option Form',
-      transport: event.target.ta_options.value
+      opt_label: event.target.ta_options.value
     });
 
 
