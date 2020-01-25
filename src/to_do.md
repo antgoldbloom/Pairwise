@@ -2,12 +2,8 @@
 
 #P0
  
- - Get GA working
  - prepoulate with more lists
- - recommending how many more pairs
- - warn against too many items
- - pair page: keep buttons still 
- - change favicon
+
 
 #POST TO HACKERNEWS
 
@@ -16,6 +12,8 @@
  - ability to upload a snapshot
  - keyboard shortcuts
  - undo button
+ - pair page: keep buttons still 
+
 
 
 #LATER

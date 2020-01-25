@@ -31,6 +31,9 @@ export default class App extends React.Component {
 
       ta_options_error: '',
       option_count:  0, 
+
+      selection_count: 0,
+      selection_target: 0,
     };  
       
     const trackingId = "UA-156912037-1"; // Replace with your Google Analytics tracking ID
@@ -93,8 +96,11 @@ export default class App extends React.Component {
       label: Object.keys(options_tmp).join('\n')
     });
 
+    
+
     const pair_tmp = this.getRandomPair(Object.keys(options_tmp));
-    this.setState({pair: pair_tmp, options: options_tmp  },() => {
+    this.setState({pair: pair_tmp, options: options_tmp, selection_count: this.state.selection_count +1  },() => {
+      console.log(this.state.selection_count);
     })
   }
 
@@ -104,9 +110,11 @@ export default class App extends React.Component {
     var options_tmp = this.state.options;
     delete options_tmp[event.target.value];
 
-
+    var option_count_tmp = this.state.option_count - 1; 
+    const selection_target_tmp = this.calcSelectionTarget(option_count_tmp);
     const pair_tmp = this.getRandomPair(Object.keys(options_tmp));
-    this.setState({pair: pair_tmp, options: options_tmp  },() => {});
+
+    this.setState({pair: pair_tmp, options: options_tmp, option_count: option_count_tmp, selection_target: selection_target_tmp  },() => {});
   }
 
 
@@ -139,8 +147,7 @@ export default class App extends React.Component {
       
      
     } else {
-      this.setState({ options: '',options_textarea: '', options_submitted: false, leaderboardShown: false },() => {
-      });
+      this.setState({ options: '',options_textarea: '', options_submitted: false, leaderboardShown: false, selection_count: 0, ta_options_error: '', option_count:  0,selection_target: 0},() => {});
 
       }
 
@@ -194,13 +201,23 @@ export default class App extends React.Component {
       ta_options_error_tmp = "The following options are duplicated: ".concat(duplicate_options.join(',')) 
     } else if (options_1d.length < 4) {
       ta_options_error_tmp = 'Must add '.concat(5-options_1d.length, ' more options.')  ;
+    } else if (options_1d.length > 100) {
+      ta_options_error_tmp = 'You\'ve added '.concat(options_1d.length, ' options. That\'ll take a long time to work through. Suggest pairing back to 50 items.')  ;
     }
 
-    this.setState({option_count : options_1d.length})
+    const selection_target_tmp = this.calcSelectionTarget(options_1d.length);
+
+    this.setState({option_count : options_1d.length, selection_target : selection_target_tmp})
 
     
     return ta_options_error_tmp
   }
+
+  calcSelectionTarget(option_count) {
+    var selection_target_tmp = Math.round(2.700094505*Math.exp(0.05657521618*option_count))
+    return selection_target_tmp
+  }
+
 
   findDuplicates = (arr) => {
     let sorted_arr = arr.slice().sort(); // You can define the comparing function here. 
@@ -222,7 +239,7 @@ export default class App extends React.Component {
         <div className="App">
               <Navbar onClick={this.handleButton} />
 
-              <Pair pair={this.state.pair} onClick={this.handleChoice}/>
+              <Pair selection_target={this.state.selection_target} selection_count={this.state.selection_count} pair={this.state.pair} onClick={this.handleChoice}/>
               <HideLeaderboard leaderboardShown={this.state.leaderboardShown} onClick={this.handleButton}/>
               {this.state.leaderboardShown ? <Leaderboard options={this.state.options} onClick={this.handleDelete} /> : <div></div>}
 
@@ -243,56 +260,3 @@ export default class App extends React.Component {
 
 }
 
-
-/*
-
-  resetOptions = async () => {
-    
-    const location = window.location.hostname;
-    const response = await fetch(`http://${location}:5000/reset_options`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({  }),
-    })
-    setPair({option:'empty'});
-
-  }
-
-  postChoice = async (chosen) => {
-
-    var drawn = "False";
-    if (chosen === "nochoice") {
-      drawn = "True";
-      chosen = pair.choice1
-    } 
-
-    var not_chosen = pair.choice1;
-    if (pair.choice1 === chosen) {
-      not_chosen = pair.choice2;
-    } 
-
-    const choice = {'chosen': chosen, 'not_chosen' : not_chosen,"drawn":drawn};
-
-    const location = window.location.hostname;
-    const response = await fetch(`http://${location}:5000/set_choice`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ choice }),
-    })
-    setLeaderboardShown(false)
-    
-  }
-
-  getPair = async () => {
-    const location = window.location.hostname;
-    const response = await fetch(`http://${location}:5000/get_options`);
-    const data = await response.json();
-    console.log(data)
-
-    setPair(data);
-    
-  }
-
-
-)
- */
