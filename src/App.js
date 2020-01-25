@@ -46,7 +46,7 @@ export default class App extends React.Component {
     ReactGA.event({
       category: 'Option Form',
       action: 'Submit Option Form',
-      opt_label: event.target.ta_options.value
+      label: event.target.ta_options.value
     });
 
 
@@ -78,18 +78,23 @@ export default class App extends React.Component {
   handleChoice = event => {
 
     
-    let not_chosen = event.target.value === this.state.pair[0] ? this.state.pair[1] : this.state.pair[0];
-    let chosen = event.target.value === this.state.pair[0] ? this.state.pair[0] : this.state.pair[1];
-    let drawn = event.target.value === 'nochoice'; 
+    let not_chosen = event.currentTarget.value === this.state.pair[0] ? this.state.pair[1] : this.state.pair[0];
+    let chosen = event.currentTarget.value === this.state.pair[0] ? this.state.pair[0] : this.state.pair[1];
+    let drawn = event.currentTarget.value === 'nochoice'; 
 
     var options_tmp = this.state.options;
 
-    [options_tmp[chosen], options_tmp[not_chosen] ] = rate_1vs1(options_tmp[chosen], options_tmp[not_chosen],drawn);
+    [options_tmp[chosen], options_tmp[not_chosen] ] = rate_1vs1(options_tmp[chosen], options_tmp[not_chosen],drawn=drawn);
     options_tmp = this.orderleaderboard(options_tmp);
+
+    ReactGA.event({
+      category: 'Leaderboard Update',
+      action: 'Submit Choice',
+      label: options_tmp
+    });
 
     const pair_tmp = this.getRandomPair(Object.keys(options_tmp));
     this.setState({pair: pair_tmp, options: options_tmp  },() => {
-      console.log(options_tmp);
     })
   }
 
@@ -106,7 +111,6 @@ export default class App extends React.Component {
 
 
   handleSelect = event => {
-       console.log(event.target.value);
 
     var prefill = '';
     if (event.target.value === "babyboy") {
@@ -129,7 +133,6 @@ export default class App extends React.Component {
 
   handleButton = event => {
 
-    console.log(event.currentTarget.value);
     if (event.currentTarget.value === 'leaderboardToggle') {
       let leaderboardShown_tmp = this.state.leaderboardShown === true ? false : true;
       this.setState({ leaderboardShown: leaderboardShown_tmp },() => {});
@@ -186,7 +189,6 @@ export default class App extends React.Component {
     const options_1d = eventValue.split("\n");
     
     const duplicate_options = this.findDuplicates(options_1d);
-    console.log(duplicate_options);
     var ta_options_error_tmp  = '';
     if (duplicate_options.length >  0) {
       ta_options_error_tmp = "The following options are duplicated: ".concat(duplicate_options.join(',')) 
