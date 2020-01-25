@@ -88,9 +88,9 @@ export default class App extends React.Component {
     options_tmp = this.orderleaderboard(options_tmp);
 
     ReactGA.event({
-      category: 'Leaderboard Update',
-      action: 'Submit Choice',
-      label: options_tmp
+      category: 'Option Form',
+      action: 'Submit Option Form',
+      label: Object.keys(options_tmp).join('\n')
     });
 
     const pair_tmp = this.getRandomPair(Object.keys(options_tmp));
