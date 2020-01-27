@@ -91,8 +91,8 @@ export default class App extends React.Component {
     options_tmp = this.orderleaderboard(options_tmp);
 
     ReactGA.event({
-      category: 'Option Form',
-      action: 'Submit Option Form',
+      category: 'Pair page',
+      action: 'Choice submitted',
       label: Object.keys(options_tmp).join('\n')
     });
 
